@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regímenes Fiscales SAT — Cuadro Comparativo</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0d14;
+    --surface: #111520;
+    --border: #1e2535;
+    --accent: #00c8b4;
+    --accent2: #00e8a0;
+    --text: #e8eaf0;
+    --muted: #6b7490;
+    --low: #22c55e;
+    --mid: #eab308;
+    --high: #f97316;
+    --top: #ef4444;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 40px 24px 60px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  header .badge {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    color: #000;
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(22px, 4vw, 38px);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  header h1 span {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  header p {
+    color: var(--muted);
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 300;
+  }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .wrapper {
+    max-width: 1280px;
+    margin: 0 auto;
+    overflow-x: auto;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 860px;
+  }
+
+  thead tr {
+    background: #0d1119;
+    border-bottom: 1px solid var(--border);
+  }
+
+  thead th {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 14px 18px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  thead th:last-child { text-align: center; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #131824; }
+
+  td {
+    padding: 14px 18px;
+    vertical-align: top;
+  }
+
+  .num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    width: 32px;
+    padding-top: 16px;
+  }
+
+  .regime-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .regime-tag {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    border: 1px solid currentColor;
+    opacity: 0.75;
+  }
+
+  .tag-pf { color: #60a5fa; }
+  .tag-pm { color: #a78bfa; }
+  .tag-ambos { color: var(--accent); }
+
+  .desc {
+    color: #9aa0b8;
+    font-size: 12.5px;
+    line-height: 1.55;
+    font-weight: 300;
+  }
+
+  .obligaciones {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .obligaciones strong {
+    color: #7c85a0;
+    font-weight: 500;
+  }
+
+  /* Tasa cell */
+  .tasa-cell {
+    text-align: center;
+    min-width: 160px;
+  }
+
+  .tasa-badge {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+
+  .tasa-sub {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.4;
+    font-weight: 300;
+  }
+
+  .bar-wrap {
+    margin-top: 6px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .bar {
+    height: 100%;
+    border-radius: 10px;
+    background: currentColor;
+  }
+
+  /* color scale */
+  .t0 { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .t1 { background: rgba(34,197,94,0.12); color: #4ade80; }
+  .t2 { background: rgba(163,230,53,0.12); color: #a3e635; }
+  .t3 { background: rgba(234,179,8,0.12); color: #eab308; }
+  .t4 { background: rgba(251,146,60,0.12); color: #fb923c; }
+  .t5 { background: rgba(249,115,22,0.12); color: #f97316; }
+  .t6 { background: rgba(239,68,68,0.12); color: #ef4444; }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 28px;
+    font-weight: 300;
+  }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Servicio de Administración Tributaria</div>
+  <h1>Regímenes Fiscales <span>México 2024</span></h1>
+  <p>Ordenados de menor a mayor tasa impositiva efectiva · Personas Físicas y Morales</p>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div> Personas Físicas</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div> Personas Morales</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#00c8b4"></div> Ambos</div>
+</div>
+
+<div class="wrapper">
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Régimen Fiscal</th>
+      <th>Descripción y Obligaciones</th>
+      <th style="text-align:center">Tasa / ISR</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- 1 -->
+    <tr>
+      <td class="num">01</td>
+      <td>
+        <div class="regime-tag tag-pf">Persona Física</div>
+        <div class="regime-name">RESICO-PF<br><span style="font-weight:400;font-size:11px;color:#9aa0b8">Simplificado de Confianza</span></div>
+      </td>
+      <td>
+        <div class="desc">Régimen más sencillo para PF con actividad empresarial, profesional o arrendamiento. Diseñado para quienes tienen ingresos anuales de hasta $3.5 MDP. Cálculo simplificado, sin deducciones autorizadas personales.</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> Facturación electrónica, pago mensual definitivo, declaración anual informativa.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t0">1% – 2.5%</div>
+        <div class="tasa-sub">Tasa fija sobre ingreso bruto<br>según tabla de ingresos</div>
+        <div class="bar-wrap"><div class="bar t0" style="width:5%"></div></div>
+      </td>
+    </tr>
+
+    <!-- 2 -->
+    <tr>
+      <td class="num">02</td>
+      <td>
+        <div class="regime-tag tag-pf">Persona Física</div>
+        <div class="regime-name">Incorporación Fiscal<br><span style="font-weight:400;font-size:11px;color:#9aa0b8">RIF (en extinción)</span></div>
+      </td>
+      <td>
+        <div class="desc">Régimen de transición para pequeños contribuyentes. Desde 2022 cerrado a nuevos inscritos; quienes ya estaban pueden terminar su periodo de 10 años con reducción del ISR. Aplica a actividades empresariales sin socios o accionistas.</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> Declaraciones bimestrales, uso de "Mis Cuentas", facturación electrónica.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t0">0% – 2%</div>
+        <div class="tasa-sub">Reducción progresiva del ISR<br>(años 1–10 de permanencia)</div>
+        <div class="bar-wrap"><div class="bar t0" style="width:4%"></div></div>
+      </td>
+    </tr>
+
+    <!-- 3 -->
+    <tr>
+      <td class="num">03</td>
+      <td>
+        <div class="regime-tag tag-ambos">Ambos</div>
+        <div class="regime-name">Plataformas Tecnológicas</div>
+      </td>
+      <td>
+        <div class="desc">Para PF que obtienen ingresos mediante aplicaciones digitales (Uber, Airbnb, Rappi, Amazon, etc.). La plataforma retiene y entera el ISR directamente al SAT. La retención puede ser pago definitivo si los ingresos no superan $300k anuales.</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> Declaración mensual o anual, CFDI de la plataforma como constancia de retención.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t1">2% – 8%</div>
+        <div class="tasa-sub">Retención sobre ingreso bruto<br>varía según tipo de actividad</div>
+        <div class="bar-wrap"><div class="bar t1" style="width:16%"></div></div>
+      </td>
+    </tr>
+
+    <!-- 4 -->
+    <tr>
+      <td class="num">04</td>
+      <td>
+        <div class="regime-tag tag-pm">Persona Moral</div>
+        <div class="regime-name">RESICO-PM<br><span style="font-weight:400;font-size:11px;color:#9aa0b8">Simplificado de Confianza PM</span></div>
+      </td>
+      <td>
+        <div class="desc">Aplicable a PM con ingresos anuales de hasta $35 MDP: personas morales que tributan en flujo de efectivo (efectivamente cobrado/pagado). Excluye holdingcos, financieras, ONGs, entre otros. Tasa reducida sobre utilidad fiscal.</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> Declaraciones mensuales, contabilidad electrónica, CFDI.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t1">1% – 2%</div>
+        <div class="tasa-sub">Sobre ingresos percibidos<br>pago mensual definitivo</div>
+        <div class="bar-wrap"><div class="bar t1" style="width:4%"></div></div>
+      </td>
+    </tr>
+
+    <!-- 5 -->
+    <tr>
+      <td class="num">05</td>
+      <td>
+        <div class="regime-tag tag-pf">Persona Física</div>
+        <div class="regime-name">Arrendamiento de Inmuebles</div>
+      </td>
+      <td>
+        <div class="desc">Para PF que obtienen ingresos por rentar bienes inmuebles (casas, locales, terrenos). Pueden optar por deducción ciega del 35% sin comprobar gastos, o deducciones autorizadas reales. ISR con tarifa progresiva del Art. 152 LISR.</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> Declaraciones mensuales o trimestrales (si ingresos ≤ $26,411.52/mes), declaración anual.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t2">1.92% – 35%</div>
+        <div class="tasa-sub">Tarifa progresiva según<br>ingreso acumulable neto</div>
+        <div class="bar-wrap"><div class="bar t2" style="width:40%"></div></div>
+      </td>
+    </tr>
+
+    <!-- 6 -->
+    <tr>
+      <td class="num">06</td>
+      <td>
+        <div class="regime-tag tag-pf">Persona Física</div>
+        <div class="regime-name">Actividades Empresariales<br>y Servicios Profesionales</div>
+      </td>
+      <td>
+        <div class="desc">Para empresarios, comerciantes, prestadores de servicios independientes (honorarios). Permite deducir gastos e inversiones estrictamente indispensables. Base gravable: ingresos menos deducciones autorizadas. Pagos provisionales mensuales.</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> Declaraciones mensuales, contabilidad, CFDI, declaración anual ISR e IVA.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t3">1.92% – 35%</div>
+        <div class="tasa-sub">Tarifa progresiva Art. 152<br>sobre utilidad fiscal</div>
+        <div class="bar-wrap"><div class="bar t3" style="width:55%"></div></div>
+      </td>
+    </tr>
+
+    <!-- 7 -->
+    <tr>
+      <td class="num">07</td>
+      <td>
+        <div class="regime-tag tag-pf">Persona Física</div>
+        <div class="regime-name">Sueldos y Salarios<br>e Ingresos Asimilados</div>
+      </td>
+      <td>
+        <div class="desc">Para trabajadores con relación laboral subordinada o asimilados a salarios (honorarios asimilados, consejeros, comisionistas). El patrón retiene y calcula el ISR mensual. Aplica subsidio al empleo para ingresos bajos.</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> Declaración anual (solo si hay otros ingresos o se exceden $400k), RFC activo.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t3">1.92% – 35%</div>
+        <div class="tasa-sub">Retención mensual vía patrón<br>tarifa Art. 96 LISR</div>
+        <div class="bar-wrap"><div class="bar t3" style="width:55%"></div></div>
+      </td>
+    </tr>
+
+    <!-- 8 -->
+    <tr>
+      <td class="num">08</td>
+      <td>
+        <div class="regime-tag tag-pf">Persona Física</div>
+        <div class="regime-name">Intereses</div>
+      </td>
+      <td>
+        <div class="desc">Ingresos por rendimientos de cuentas bancarias, inversiones, pagarés, bonos o instrumentos de deuda. Las instituciones financieras retienen ISR mensualmente. Se acumula en declaración anual con los demás ingresos de la PF.</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> Declaración anual si hay otros ingresos; constancias de retención del banco.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t2">0.15%</div>
+        <div class="tasa-sub">Retención provisional sobre<br>capital (tasa anual 2024)<br>+ acumulación tarifa progresiva</div>
+        <div class="bar-wrap"><div class="bar t2" style="width:8%"></div></div>
+      </td>
+    </tr>
+
+    <!-- 9 -->
+    <tr>
+      <td class="num">09</td>
+      <td>
+        <div class="regime-tag tag-pf">Persona Física</div>
+        <div class="regime-name">Premios</div>
+      </td>
+      <td>
+        <div class="desc">Ingresos por loterías, rifas, sorteos, juegos y concursos. El retenedor (empresa organizadora) aplica la tasa directamente sobre el premio bruto. Es pago definitivo, no se acumula al ingreso anual.</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> No hay declaración adicional; retención final por el pagador.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t4">1% – 21%</div>
+        <div class="tasa-sub">Tasa fija definitiva sobre<br>el monto bruto del premio</div>
+        <div class="bar-wrap"><div class="bar t4" style="width:30%"></div></div>
+      </td>
+    </tr>
+
+    <!-- 10 -->
+    <tr>
+      <td class="num">10</td>
+      <td>
+        <div class="regime-tag tag-pf">Persona Física</div>
+        <div class="regime-name">Enajenación de Bienes</div>
+      </td>
+      <td>
+        <div class="desc">Ingresos por venta de bienes inmuebles, acciones, automóviles u otros activos. La ganancia se calcula sobre el precio de venta menos costo de adquisición actualizado. El notario puede retener si es inmueble. Exención para casa habitación (hasta cierto límite).</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> Declaración anual, pago provisional en operaciones inmobiliarias vía notario.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t4">20% fija</div>
+        <div class="tasa-sub">O tarifa progresiva (1.92–35%)<br>sobre ganancia fiscal</div>
+        <div class="bar-wrap"><div class="bar t4" style="width:45%"></div></div>
+      </td>
+    </tr>
+
+    <!-- 11 -->
+    <tr>
+      <td class="num">11</td>
+      <td>
+        <div class="regime-tag tag-pf">Persona Física</div>
+        <div class="regime-name">Adquisición de Bienes</div>
+      </td>
+      <td>
+        <div class="desc">Cuando una PF recibe bienes por donación (no exenta), herencia o prescripción (usucapión). El ingreso es el valor de mercado del bien adquirido. Se acumula como ingreso ordinario en la declaración anual.</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> Declaración anual; ISR sobre el valor comercial del bien.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t3">1.92% – 35%</div>
+        <div class="tasa-sub">Tarifa progresiva sobre valor<br>de mercado del bien</div>
+        <div class="bar-wrap"><div class="bar t3" style="width:55%"></div></div>
+      </td>
+    </tr>
+
+    <!-- 12 -->
+    <tr>
+      <td class="num">12</td>
+      <td>
+        <div class="regime-tag tag-pf">Persona Física</div>
+        <div class="regime-name">Dividendos y Utilidades<br>Distribuidas</div>
+      </td>
+      <td>
+        <div class="desc">Para socios/accionistas de PM que reciben dividendos. La empresa retiene 10% de ISR adicional al repartir. El socio acumula el dividendo en su declaración anual y puede acreditar el ISR corporativo pagado por la empresa (factor 1.4286).</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> Declaración anual, constancia de retención de la PM.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t5">10% + 30%</div>
+        <div class="tasa-sub">10% retención PF + 30% ISR<br>corporativo = carga ~37%</div>
+        <div class="bar-wrap"><div class="bar t5" style="width:70%"></div></div>
+      </td>
+    </tr>
+
+    <!-- 13 -->
+    <tr>
+      <td class="num">13</td>
+      <td>
+        <div class="regime-tag tag-pm">Persona Moral</div>
+        <div class="regime-name">Régimen General de Ley<br><span style="font-weight:400;font-size:11px;color:#9aa0b8">Personas Morales</span></div>
+      </td>
+      <td>
+        <div class="desc">Aplica a sociedades mercantiles (SA, SRL, SC), asociaciones civiles con fines lucrativos, organismos descentralizados, entre otros. Tributa sobre utilidad fiscal (ingresos acumulables menos deducciones autorizadas). Permite deducción de inversiones e IETU diferenciado.</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> Contabilidad electrónica, declaraciones mensuales, anual, DIOT, CFDI.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t5">30%</div>
+        <div class="tasa-sub">Tasa fija sobre utilidad fiscal<br>Art. 9 LISR</div>
+        <div class="bar-wrap"><div class="bar t5" style="width:80%"></div></div>
+      </td>
+    </tr>
+
+    <!-- 14 -->
+    <tr>
+      <td class="num">14</td>
+      <td>
+        <div class="regime-tag tag-pm">Persona Moral</div>
+        <div class="regime-name">No Lucrativas / Donatarias<br><span style="font-weight:400;font-size:11px;color:#9aa0b8">Régimen de No Contribuyentes</span></div>
+      </td>
+      <td>
+        <div class="desc">Asociaciones y sociedades civiles sin fines de lucro, donatarias autorizadas, partidos políticos, sindicatos. En general no pagan ISR por sus actividades propias; sí pagan si tienen ingresos distintos a su objeto social o no cumplen requisitos SAT.</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> Declaración informativa anual, CFDI por donativos, transparencia de ingresos.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t0">0% – 30%</div>
+        <div class="tasa-sub">Exentos en actividad propia<br>30% sobre ingresos ajenos</div>
+        <div class="bar-wrap"><div class="bar t0" style="width:15%"></div></div>
+      </td>
+    </tr>
+
+    <!-- 15 -->
+    <tr>
+      <td class="num">15</td>
+      <td>
+        <div class="regime-tag tag-pm">Persona Moral</div>
+        <div class="regime-name">Coordinados<br><span style="font-weight:400;font-size:11px;color:#9aa0b8">Autotransporte Terrestre</span></div>
+      </td>
+      <td>
+        <div class="desc">Régimen especial para personas morales dedicadas exclusivamente al autotransporte terrestre de carga o pasajeros. El coordinado calcula y entera el ISR por cuenta de sus integrantes PF o PM, aplicando la tarifa que corresponda a cada uno.</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> Contabilidad del coordinado, declaración por cuenta de integrantes, CFDI.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t3">16% – 35%</div>
+        <div class="tasa-sub">Según tarifa del integrante<br>(PF: progresiva / PM: 30%)</div>
+        <div class="bar-wrap"><div class="bar t3" style="width:50%"></div></div>
+      </td>
+    </tr>
+
+    <!-- 16 -->
+    <tr>
+      <td class="num">16</td>
+      <td>
+        <div class="regime-tag tag-pm">Persona Moral</div>
+        <div class="regime-name">Actividades Agrícolas,<br>Ganaderas, Silvícolas y Pesqueras</div>
+      </td>
+      <td>
+        <div class="desc">Sector primario. PM con ingresos hasta $423k anuales por integrante: exentos de ISR. Si se superan, aplica tasa del 30% solo sobre el excedente. Reducción del 30% del ISR para PM. Sin límite de ingresos para el régimen, pero sí para la exención.</div>
+        <div class="obligaciones"><strong>Oblig.:</strong> Contabilidad simplificada, declaraciones, CFDI; bimestrales para pequeños.</div>
+      </td>
+      <td class="tasa-cell">
+        <div class="tasa-badge t1">0% – 30%</div>
+        <div class="tasa-sub">Exención parcial + reducción<br>30% ISR sobre excedente</div>
+        <div class="bar-wrap"><div class="bar t1" style="width:20%"></div></div>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+</div>
+
+<footer>
+  <p>Fuente: LISR 2024 · SAT México · Las tasas pueden variar según ingresos anuales, deducciones y actualizaciones de la Resolución Miscelánea Fiscal vigente.</p>
+  <p style="margin-top:6px">Este cuadro es informativo. Consulta a un contador público certificado para tu caso específico.</p>
+</footer>
+
+</body>
+</html>
